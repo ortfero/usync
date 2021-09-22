@@ -103,7 +103,7 @@ int main() {
         std::printf("%d\n", resource);
     });
     
-    t.join();
+    t1.join();
     t2.join();
     return 0;
 }
