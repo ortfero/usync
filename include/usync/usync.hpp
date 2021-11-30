@@ -175,6 +175,8 @@ private:
 
 template<typename T, typename L = spinlock> struct synchronized {
 
+  using resource_type = T;
+
   struct unique_access {
 
     unique_access() = delete;
