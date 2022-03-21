@@ -1,10 +1,7 @@
-project('usync-test', 'cpp',
-  default_options: ['cpp_std=c++17'])
+threads = dependency('threads')
 
-incdirs = include_directories('../include')
+usync_test = executable('usync-test', 'test.cpp',
+    dependencies: [usync, threads])
 
-deps = []
+test('all', usync_test)
 
-executable('usync-test', 'test.cpp',
-	include_directories: incdirs,
-	dependencies: deps)
