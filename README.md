@@ -1,5 +1,5 @@
 # usync
-C++17 one-header library for synchronization
+C++17 header-only library for spinlocks
 
 ## Snippets
 
