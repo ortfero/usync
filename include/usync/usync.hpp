@@ -1,3 +1,7 @@
+// This file is part of usync library
+// Copyright 2021-2022 Andrei Ilin <ortfero@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 
