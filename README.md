@@ -56,6 +56,7 @@ int main() {
 using sync_with_spinlock = usync::synchronized<resource>;
 using sync_with_shared_spinlock = usync::synchronized<resource, usync::shared_spinlock>;
 using sync_with_no_lock = usync::synchronized<resource, usync::no_lock>;
+using sync_with_mutex = usync::synchronized<resource, std::mutex>;
 ```
 
 ### Using spinlock
