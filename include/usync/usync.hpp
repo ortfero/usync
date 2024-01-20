@@ -6,9 +6,11 @@
 
 
 #include <atomic>
+#include <list>
 #include <shared_mutex>
 #include <thread>
 #include <utility>
+#include <vector>
 
 #if defined(_MSC_VER)
 #    include <intrin.h>
@@ -221,6 +223,89 @@ namespace usync {
         T resource_;
 
     };   // synchronized
+
+
+    template<typename T>
+    class promise {
+        T value_;
+        std::atomic_flag event_;
+
+    public:
+
+        promise() = default;
+        promise(promise const&) = delete;
+        promise& operator = (promise const&) = delete;
+
+        promise& operator = (T const& value) {
+            value_ = value;
+            event_.test_and_set(std::memory_order_relaxed);
+            event_.notify_one();
+            return *this;
+        }
+
+
+        promise& operator = (T&& value) {
+            value_ = std::move(value);
+            event_.test_and_set(std::memory_order_relaxed);
+            event_.notify_one();
+            return *this;
+        }
+
+
+        T const& await() const& noexcept {
+            event_.wait(false, std::memory_order_relaxed);
+            return value_;            
+        }
+
+
+        T&& await() && noexcept {
+            event_.wait(false, std::memory_order_relaxed);
+            return std::move(value_);
+        }
+
+
+        void clear() {
+            event_.clear(std::memory_order_relaxed);
+        }
+
+    }; // promise
+
+
+    template<class T> class pool {
+
+        std::vector<T> recycled_;
+        std::list<T> in_use_;
+
+    public:
+
+        using pointer = typename std::list<T>::iterator;
+
+        pool() = default;
+        pool(pool const&) = delete;
+        pool& operator = (pool const&) = delete;
+        pool(pool&&) = default;
+        pool& operator = (pool&&) = default;
+
+        pointer remake() {
+            if(recycled_.empty()) {
+                in_use_.push_front(T{});
+            } else {
+                in_use_.push_front(std::move(recycled_.back()));
+                recycled_.pop_back();
+            }
+            return in_use_.begin();
+        }
+
+
+        void recycle(pointer it) {
+            recycled_.push_back(std::move(*it));
+            in_use_.erase(it);
+        }
+
+    }; // pool
+
+    template<class T> using pool_pointer = typename pool<T>::pointer;
+    template<class T> using synchronized_pool = synchronized<pool<T>>;
 
 
 }   // namespace usync
