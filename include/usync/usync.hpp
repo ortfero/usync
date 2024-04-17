@@ -6,7 +6,6 @@
 
 
 #include <atomic>
-#include <list>
 #include <shared_mutex>
 #include <thread>
 #include <utility>
@@ -183,6 +182,7 @@ namespace usync {
 
             T& operator*() const noexcept { return resource_; }
             T* operator->() const noexcept { return &resource_; }
+            template<typename F> void run(F&& f) { f(resource_); }
 
         private:
             std::unique_lock<L> guard_;
@@ -201,6 +201,7 @@ namespace usync {
 
             T const& operator*() const noexcept { return resource_; }
             T const* operator->() const noexcept { return &resource_; }
+            template<typename F> void run(F&& f) { f(resource_); }
 
         private:
             std::shared_lock<L> guard_;
