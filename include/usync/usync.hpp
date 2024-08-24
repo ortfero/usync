@@ -10,6 +10,7 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#include <list>
 
 #if defined(_MSC_VER)
 #    include <intrin.h>
@@ -274,7 +275,7 @@ namespace usync {
 
     template<class T> class pool {
 
-        std::vector<T> recycled_;
+        std::list<T> recycled_;
         std::list<T> in_use_;
 
     public:

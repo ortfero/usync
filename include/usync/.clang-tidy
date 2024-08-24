@@ -1,0 +1,11 @@
+---
+Checks: >
+	-*,
+	bugprone-*
+	google-*
+	misc-*
+
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle: none
+
