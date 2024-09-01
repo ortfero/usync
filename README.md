@@ -1,7 +1,24 @@
 # usync
-C++17 header-only library for spinlocks
 
-## Snippets
+C++20 header-only library for spinlocks
+
+
+## Installation
+
+Drop contents of `include` at your include path
+
+
+## Tests and benchmark
+
+usync uses [just](https://github.com/casey/just) to build tests:
+
+```shell
+cd ufmt
+just test
+```
+
+
+## Usage
 
 ### Using synchronized access
 
@@ -112,4 +129,7 @@ int main() {
 ```
 
 
+## License
+
+usync licensed under [MIT license](https://opensource.org/licenses/MIT).
 
